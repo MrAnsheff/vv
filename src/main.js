@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import App from './App.vue'
-import Servers from './Servers.vue'
+import Servers from './components/Servers.vue'
 
 Vue.component('my-servers', Servers);
 
