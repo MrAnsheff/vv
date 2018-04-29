@@ -1,20 +1,16 @@
 <template>
     <div class="col-xs-12 col-sm-6">
         <ul class="list-group">
-            <li
-                    class="list-group-item"
-                    v-for="server in servers"
-                    :key="server"
-                    :class="{styleDef}"
-                    @click='viewServer(server)'>
-                Server #{{ server.id }}
-            </li>
+            <app-server v-for="server in servers"
+                         :key="server"
+                         :server="server"></app-server>
         </ul>
     </div>
 </template>
 
 <script>
 import {eventBus} from '../../main'
+import Server from './Server.vue'
 export default{
     data: function(){
         return {
@@ -26,11 +22,8 @@ export default{
             ]
         }
     },
-    methods:{
-        viewServer(server){
-            eventBus.$emit('serverOpen', server)
-
-        }
+    components:{
+        appServer:Server
     },
     created(){
         eventBus.$on('normalize', (serverId)=>{
