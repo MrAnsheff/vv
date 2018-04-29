@@ -3,13 +3,13 @@
         <div class="row">
             <div class="col-xs-12">
                 <br>
-                <button class="btn btn-primary">Load Blue Template</button>
-                <button class="btn btn-success">Load Green Template</button>
-                <button class="btn btn-danger">Load Red Template</button>
+                <button class="btn btn-primary" @click="viewC = 'appBlue'">Load Blue Template</button>
+                <button class="btn btn-success" @click="viewC = 'appGreen'">Load Green Template</button>
+                <button class="btn btn-danger" @click="viewC = 'appRed'">Load Red Template</button>
                 <hr>
-                <app-blue><b slot="state">Good</b></app-blue>
-                <app-green><b>Good</b></app-green>
-                <app-red><b>Good</b></app-red>
+                <keep-alive>
+                <component :is="viewC"></component>
+                </keep-alive>
             </div>
         </div>
     </div>
