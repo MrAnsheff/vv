@@ -4,7 +4,7 @@
                     class="list-group-item"
                     style="cursor:pointer"
                     @click='viewServer(server)'
-                    :class="{stylez}"
+                    :class="[{stylez}, {stylezb}]"
                     @mouseover="stylez=true"
                     @mouseleave="stylez=false"
                     >
@@ -18,13 +18,15 @@ import {eventBus} from '../../main'
 export default{
     data: function(){
         return {
-            stylez:false
+            stylez:false,
+            stylezb:false
         }
     },
     props:['server'],
         methods:{
         viewServer(server){
             eventBus.$emit('serverOpen', server)
+            this.stylezb = true
 
         }
     }
@@ -35,6 +37,9 @@ export default{
  
     .stylez {
         background-color: aquamarine
+    }
+    .stylezb {
+        background-color: blue
     }
 
 </style>
