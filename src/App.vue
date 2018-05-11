@@ -1,12 +1,136 @@
 <template>
     <div class="container">
-        <app-progress :quoteCount="this.quotes.length" :maxQuotes="maxQuotes"></app-progress>
-        <app-new-qoute @addQuote='newQuote'></app-new-qoute>
-        <app-quotes-grid :quotes='quotes' @deleteQuote='deleteQuote'></app-quotes-grid>
-        <div class="row">
-            <div class="col-sm-12 text-center">
-                <div class="alert alert-info">
-                    Info: Click on a quote to delete it!
+        <form>
+            <div class="row">
+                <div class="col-xs-12 col-sm-8 col-sm-offset-2 col-md-6 col-md-offset-3">
+                    <h1>File a Complaint</h1>
+                    <hr>
+                    <div class="form-group">
+                        <label for="email">Mail</label>
+                        <input
+                                type="text"
+                                id="email"
+                                class="form-control"
+                                v-model="userData.email">
+                    </div>
+                    <div class="form-group">
+                        <label for="password">Password</label>
+                        <input
+                                type="password"
+                                id="password"
+                                class="form-control"
+                                v-model="userData.pass">
+                    </div>
+                    <div class="form-group">
+                        <label for="age">Age</label>
+                        <input
+                                type="number"
+                                id="age"
+                                class="form-control"
+                                v-model="userData.age">
+                    </div>
+
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-xs-12 col-sm-8 col-sm-offset-2 col-md-6 col-md-offset-3 form-group">
+                    <label for="message">Message</label><br>
+                    <!-- Interpolation between <textarea>{{ test }}</textarea> doesn't work!-->
+                    <textarea
+                            id="message"
+                            rows="5"
+                            class="form-control"
+                            v-model="message"></textarea>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-xs-12 col-sm-8 col-sm-offset-2 col-md-6 col-md-offset-3">
+                    <div class="form-group">
+                        <label for="sendmail">
+                            <input
+                                    type="checkbox"
+                                    id="sendmail"
+                                    value="SendMail"
+                                    v-model="sendMail"> Send Mail
+                        </label>
+                        <label for="sendInfomail">
+                            <input
+                                    type="checkbox"
+                                    id="sendInfomail"
+                                    value="SendInfoMail"
+                                    v-model="sendMail"> Send Infomail
+                        </label>
+                    </div>
+
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-xs-12 col-sm-8 col-sm-offset-2 col-md-6 col-md-offset-3 form-group">
+                    <label for="male">
+                        <input
+                                type="radio"
+                                id="male"
+                                value="Male"
+                                v-model="gender"> Male
+                    </label>
+                    <label for="female">
+                        <input
+                                type="radio"
+                                id="female"
+                                value="Female"
+                                v-model="gender"> Female
+                    </label>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-xs-12 col-sm-8 col-sm-offset-2 col-md-6 col-md-offset-3 from-group">
+                    <label for="priority">Priority</label>
+                    <select
+                            id="priority"
+                            class="form-control"
+                            v-model="defaultOption">
+                        <option v-for="option in options" :key="option">{{ option }}</option>
+                    </select>
+                </div>
+            </div>
+            <hr>
+            <div class="row">
+                <div class="col-xs-12 col-sm-8 col-sm-offset-2 col-md-6 col-md-offset-3 from-group">
+                    <app-switch v-model="currentState"></app-switch>
+                </div>
+            </div>
+            <hr>
+            <div class="row">
+                <div class="col-xs-12 col-sm-8 col-sm-offset-2 col-md-6 col-md-offset-3">
+                    <button
+                            class="btn btn-primary"
+                            @click.prevent="submitted">Submit!
+                    </button>
+                </div>
+            </div>
+        </form>
+        <hr>
+        <div class="row" v-if="isSubmitted">
+            <div class="col-xs-12 col-sm-8 col-sm-offset-2 col-md-6 col-md-offset-3">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h4>Your Data</h4>
+                    </div>
+                    <div class="panel-body">
+                        <p>Mail: {{ userData.email }}</p>
+                        <p>Password: {{ userData.pass }}</p>
+                        <p>Age: {{ userData.age }}</p>
+                        <p>Message: {{ message }}</p>
+                        <p><strong>Send Mail?</strong></p>
+                        <ul>
+                            <li v-for="input in sendMail" :key="input">{{ input }}</li>
+                        </ul>
+                        <p>Gender: {{ gender }}</p>
+                        <p>Priority:</p>
+                        <p>Switched: {{ defaultOption }}</p>
+                        <p>CustomSwitch: {{ currentState }}</p>
+                        
+                    </div>
                 </div>
             </div>
         </div>
@@ -14,38 +138,35 @@
 </template>
 
 <script>
-    import QuotesGrid from './components/QuotesGrid.vue';
-    import NewQuote from './components/NewQuote.vue'
-    import ProgressBar from './components/ProgressBar.vue'
-
+    import Switch from "./components/Switch.vue"
     export default {
-        data: function() {
-            return {
-                quotes:[
-                    'The first simple quote'
-                ],
-                maxQuotes: 10
+        data(){
+            return{
+                userData: {
+                    email:'',
+                    pass:'',
+                    age: 31
+                },
+                sendMail: [],
+                gender:'Male',
+                options:['High', 'Medium', 'Low'],
+                defaultOption: 'Medium',
+                message:'This is test message',
+                currentState: true,
+                isSubmitted: false
             }
-        },
-        methods:{
-            newQuote(quote){
-                if(this.quotes.length>=10){
-                    return alert('Please delete anyone quote first!');
-                }
-                this.quotes.push(quote)
-            },
-            deleteQuote(index){
-                this.quotes.splice(index,1);
-            }
-
         },
         components:{
-            appQuotesGrid: QuotesGrid,
-            appNewQoute: NewQuote,
-            appProgress: ProgressBar
+            appSwitch: Switch
+        },
+        methods: {
+            submitted(){
+                this.isSubmitted = true;
+            }
         }
     }
 </script>
 
 <style>
+
 </style>
